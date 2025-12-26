@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Messenger Bot Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen (Initially shown) -->
+    <div id="loginScreen" class="screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-robot"></i> Messenger Bot Manager</h1>
+                <p>Advanced Multi-User Bot Control Panel</p>
+            </div>
+            
+            <div class="login-form">
+                <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <button id="loginBtn" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <div class="user-list">
+                    <h3><i class="fas fa-users"></i> Available Users</h3>
+                    <p><i class="fas fa-crown"></i> <strong>Admin:</strong> admin / 5550561</p>
+                    <p><i class="fas fa-user"></i> <strong>User123:</strong> user123 / user123</p>
+                    <p><i class="fas fa-user"></i> <strong>User1:</strong> user1 / password1</p>
+                    <p><i class="fas fa-user"></i> <strong>User2:</strong> user2 / password2</p>
+                    <p><i class="fas fa-user"></i> <strong>User3:</strong> user3 / password3</p>
+                    <p><i class="fas fa-user"></i> <strong>User4:</strong> user4 / password4</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden initially) -->
+    <div id="dashboard" class="screen" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-robot"></i> Bot Manager</h2>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="currentUser">Guest</span>
+                    <span id="userRole" class="role-badge"></span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-page="create">
+                    <i class="fas fa-plus-circle"></i> Create Task
+                </a>
+                <a href="#" class="nav-item" data-page="tasks">
+                    <i class="fas fa-tasks"></i> My Tasks
+                </a>
+                <a href="#" class="nav-item" data-page="stats">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="admin" style="display: none;">
+                    <i class="fas fa-crown"></i> Admin Panel
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+                <div class="system-status">
+                    <span class="status-indicator online"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageSubtitle">Manage your messenger bots efficiently</p>
+                </div>
+                <div class="header-right">
+                    <div class="stats-summary">
+                        <div class="stat-item">
+                            <i class="fas fa-tasks"></i>
+                            <span id="statTasks">0</span>
+                            <small>Tasks</small>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-play-circle"></i>
+                            <span id="statActive">0</span>
+                            <small>Active</small>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-paper-plane"></i>
+                            <span id="statSent">0</span>
+                            <small>Sent</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Pages -->
+            <div class="content-pages">
+                <!-- Dashboard Page -->
+                <div id="page-dashboard" class="page active">
+                    <div class="welcome-card">
+                        <h2><i class="fas fa-hand-wave"></i> Welcome back, <span id="welcomeUser">User</span>!</h2>
+                        <p>Your messenger bot management system is ready. Create and manage multiple bots from one place.</p>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <div class="action-grid">
+                            <button class="action-btn" data-page="create">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Create New Task</span>
+                            </button>
+                            <button class="action-btn" data-page="tasks">
+                                <i class="fas fa-tasks"></i>
+                                <span>View All Tasks</span>
+                            </button>
+                            <button class="action-btn" data-page="stats">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>View Statistics</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-tasks">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                        <div id="recentTasksList" class="tasks-list">
+                            <p class="empty-state">No tasks created yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Task Page -->
+                <div id="page-create" class="page">
+                    <h2><i class="fas fa-plus-circle"></i> Create New Bot Task</h2>
+                    
+                    <form id="createTaskForm" class="task-form">
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="taskName"><i class="fas fa-tag"></i> Task Name *</label>
+                                    <input type="text" id="taskName" required placeholder="My Awesome Bot">
+                                </div>
+                                <div class="form-group">
+                                    <label for="threadID"><i class="fas fa-comments"></i> Thread/Group ID *</label>
+                                    <input type="text" id="threadID" required placeholder="123456789012345">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="delay"><i class="fas fa-clock"></i> Delay (seconds) *</label>
+                                    <input type="number" id="delay" min="1" value="5" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-font"></i> Message Formatting</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="hatersName"><i class="fas fa-user-tag"></i> Prefix Name</label>
+                                    <input type="text" id="hatersName" placeholder="@hater">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastHereName"><i class="fas fa-user-tag"></i> Suffix Name</label>
+                                    <input type="text" id="lastHereName" placeholder="@last">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-file-upload"></i> File Upload</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cookieFile"><i class="fas fa-cookie"></i> Cookie File (.txt) *</label>
+                                    <input type="file" id="cookieFile" accept=".txt" required>
+                                    <small>Facebook cookie file</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="messageFile"><i class="fas fa-file-alt"></i> Messages File (.txt) *</label>
+                                    <input type="file" id="messageFile" accept=".txt" required>
+                                    <small>One message per line</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-sliders-h"></i> Advanced Settings</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="maxMessages"><i class="fas fa-chart-line"></i> Max Messages (0 = unlimited)</label>
+                                    <input type="number" id="maxMessages" min="0" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="autoRestart"><i class="fas fa-redo"></i> Auto Restart on Failure</label>
+                                    <select id="autoRestart">
+                                        <option value="true">Enabled</option>
+                                        <option value="false">Disabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-rocket"></i> Create & Start Task
+                            </button>
+                            <button type="button" class="btn-secondary" data-page="dashboard">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tasks Page -->
+                <div id="page-tasks" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-tasks"></i> Task Management</h2>
+                        <div class="page-actions">
+                            <select id="taskFilter">
+                                <option value="all">All Tasks</option>
+                                <option value="running">Running</option>
+                                <option value="stopped">Stopped</option>
+                                <option value="mine">My Tasks</option>
+                            </select>
+                            <button id="refreshTasks" class="btn-secondary">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="tasksContainer" class="tasks-container">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Statistics Page -->
+                <div id="page-stats" class="page">
+                    <h2><i class="fas fa-chart-bar"></i> Statistics Dashboard</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-tasks"></i>
+                            <h3 id="totalTasksStat">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-play-circle"></i>
+                            <h3 id="activeTasksStat">0</h3>
+                            <p>Active Tasks</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-paper-plane"></i>
+                            <h3 id="totalSentStat">0</h3>
+                            <p>Messages Sent</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-times-circle"></i>
+                            <h3 id="totalFailedStat">0</h3>
+                            <p>Messages Failed</p>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <h3><i class="fas fa-chart-pie"></i> Task Status Distribution</h3>
+                            <div id="statusChart" class="chart-placeholder">
+                                Chart will appear here
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3><i class="fas fa-chart-line"></i> Activity Timeline</h3>
+                            <div id="activityChart" class="chart-placeholder">
+                                Chart will appear here
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel (Only for admins) -->
+                <div id="page-admin" class="page">
+                    <h2><i class="fas fa-crown"></i> Admin Control Panel</h2>
+                    
+                    <div class="admin-tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" data-tab="users">Users</button>
+                            <button class="tab-btn" data-tab="system">System</button>
+                            <button class="tab-btn" data-tab="logs">Logs</button>
+                        </div>
+
+                        <div class="tab-content">
+                            <!-- Users Tab -->
+                            <div id="tab-users" class="tab-pane active">
+                                <h3><i class="fas fa-users"></i> User Management</h3>
+                                <div class="admin-actions">
+                                    <button id="addUserBtn" class="btn-primary">
+                                        <i class="fas fa-user-plus"></i> Add User
+                                    </button>
+                                </div>
+                                <div id="usersList" class="admin-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Role</th>
+                                                <th>Tasks</th>
+                                                <th>Created</th>
+                                                <th>Last Login</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Users will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- System Tab -->
+                            <div id="tab-system" class="tab-pane">
+                                <h3><i class="fas fa-server"></i> System Information</h3>
+                                <div id="systemInfo">
+                                    <!-- System info will be loaded here -->
+                                </div>
+                            </div>
+
+                            <!-- Logs Tab -->
+                            <div id="tab-logs" class="tab-pane">
+                                <h3><i class="fas fa-clipboard-list"></i> System Logs</h3>
+                                <div id="systemLogs" class="console">
+                                    <!-- Logs will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="page-settings" class="page">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <div class="settings-container">
+                        <div class="settings-card">
+                            <h3><i class="fas fa-user-shield"></i> Account Settings</h3>
+                            <form id="changePasswordForm">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" id="currentPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" id="newPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm New Password</label>
+                                    <input type="password" id="confirmPassword">
+                                </div>
+                                <button type="submit" class="btn-primary">Change Password</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3><i class="fas fa-chart-bar"></i> Your Statistics</h3>
+                            <div id="userStats">
+                                <!-- User stats will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Console Modal -->
+    <div id="consoleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-terminal"></i> Task Console</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="taskConsole" class="console">
+                    <!-- Console logs will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
